@@ -1,5 +1,10 @@
 const router = require('express').Router();
-const { getThoughts, createThought } = require('../../controllers/thoughtController');
+
+// prettier-ignore
+const { 
+    getThoughts, 
+    createThought 
+} = require('../../controllers/thoughtController');
 
 // /api/thoughts
 router.route('/').get(getThoughts).post(createThought);

@@ -1,20 +1,29 @@
-const { Thought } = require('../models/Thought');
+const { Thought, User } = require('../models');
 
 module.exports = {
     // get all thoughts
+    //prettier-ignore
     async getThoughts(req, res) {
         try {
-            const thoughts = await Thought.find();
+            const thoughts = await Thought
+                .find()
+                .populate('reactions');
             res.json(thoughts);
         } catch (err) {
-            res.status(500).json(err);
+            res.status(500)
+                .json(err);
         }
     },
     // create a new thought
     async createThought(req, res) {
         try {
-            const dbThoughtData = await Thought.create(req.body);
-            res.json(dbThoughtData);
+            const thought = await Thought.create(req.body);
+            const user = await User.findOneAndUpdate(
+                { _id: req.body.userId },
+                { $push: { thoughts: thought._id } },
+                { new: true }
+            );
+            res.json(user);
         } catch (err) {
             res.status(500).json(err);
         }
