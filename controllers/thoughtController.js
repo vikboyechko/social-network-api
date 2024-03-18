@@ -38,10 +38,10 @@ module.exports = {
             const user = await User.findOneAndUpdate(
                 { _id: req.body.userId },
                 { $push: { thoughts: thought._id } },
-                { new: true }.populate('thoughts')
+                { new: true }
             );
 
-            res.json(user);
+            res.json(thought);
         } catch (err) {
             res.status(500).json(err);
         }
