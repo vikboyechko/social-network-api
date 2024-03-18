@@ -18,7 +18,6 @@ module.exports = {
     async getSingleUser(req, res) {
         try {
             const user = await User.findOne({ _id: req.params.userId }).select('-__v');
-            // .populate('friends');
 
             if (!user) {
                 return res.status(404).json({ message: 'No user found with this id!' });
@@ -83,6 +82,25 @@ module.exports = {
                 { $addToSet: { friends: req.params.friendId } },
                 { new: true }
             ).populate('friends');
+
+            if (!user) {
+                return res.status(404).json({ message: 'No user found with this id!' });
+            }
+
+            res.json(user);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+
+    // remove a friend from a user's friend list
+    async removeFriend(req, res) {
+        try {
+            const user = await User.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $pull: { friends: req.params.friendId } },
+                { new: true }
+            );
 
             if (!user) {
                 return res.status(404).json({ message: 'No user found with this id!' });
