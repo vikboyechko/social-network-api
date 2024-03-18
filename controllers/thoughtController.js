@@ -21,7 +21,7 @@ module.exports = {
             const user = await User.findOneAndUpdate(
                 { _id: req.body.userId },
                 { $push: { thoughts: thought._id } },
-                { new: true }
+                { new: true }.populate('thoughts')
             );
             res.json(user);
         } catch (err) {
