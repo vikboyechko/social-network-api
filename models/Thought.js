@@ -18,6 +18,7 @@ const reactionSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
+            get: formattedDate,
         },
     },
     {
@@ -39,6 +40,7 @@ const thoughtSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
+            get: formattedDate,
         },
         username: {
             type: String,
@@ -62,6 +64,10 @@ thoughtSchema
     .get(function () {
         return this.reactions.length;
 });
+
+function formattedDate(date) {
+    return date.toLocaleDateString();
+}
 
 const Thought = model('Thought', thoughtSchema);
 
