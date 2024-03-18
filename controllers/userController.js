@@ -1,8 +1,8 @@
 // const { ObjectId } = require('mongoose').Types;
-const { User, Thought } = require('../models');
+const { User } = require('../models/User');
 
 module.exports = {
-    // Get all students
+    // get all users
     async getUsers(req, res) {
         try {
             const users = await User.find();
@@ -11,7 +11,8 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-    // Get a single student
+
+    // get a single user by its _id and thought and friend data
     async getSingleUser(req, res) {
         try {
             const user = await User.findOne({ _id: req.params.userId }).select('-__v');
@@ -20,11 +21,18 @@ module.exports = {
                 return res.status(404).json({ message: 'No user with that ID' });
             }
 
-            res.json(user);
+            const userObj = {
+                users,
+                thoughts,
+                friends,
+            };
+
+            res.json(userObj);
         } catch (err) {
             res.status(500).json(err);
         }
     },
+
     // create a new user
     async createUser(req, res) {
         try {
@@ -35,7 +43,7 @@ module.exports = {
         }
     },
 
-    // Delete a user
+    // delete a user
     async deleteUser(req, res) {
         try {
             const user = await User.findOneAndDelete({ _id: req.params.userId });
